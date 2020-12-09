@@ -1,0 +1,180 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<!--
+<form method="post" action="/api/friends">
+-->
+
+<div id="questions">
+	
+	<h3>Do you enjoy the town where you live?</h3>
+	<p>
+		<select name="questions[]" id="q1">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+
+	<h3>Do you enjoy attending college football games?</h3>
+	<p>
+		<select name="questions[]" id="q2">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<h3>Do you enjoy attending college basketball games?</h3>
+	<p>
+		<select name="questions[]" id="q3">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<h3>Do you enjoy attending rock concerts?</h3>
+	<p>
+		<select name="questions[]" id="q4">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<h3>Do you enjoy attending racecar events at Charlotte Motor Speedway?</h3>
+	<p>
+		<select name="questions[]" id="q5">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<h3>Do you enjoy snow skiing?</h3>
+	<p>
+		<select name="questions[]" id="q6">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<h3>Do you enjoy attending amusement parks?</h3>
+	<p>
+		<select name="questions[]" id="q7">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<h3>Do you enjoy whitewater rafting?</h3>
+	<p>
+		<select name="questions[]" id="q8">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<h3>Do you enjoy traveling?</h3>
+	<p>
+		<select name="questions[]" id="q9">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<h3>Do you enjoy watching sci-fi movies?</h3>
+	<p>
+		<select name="questions[]" id="q10">
+			<option value="1">1 (Strongly Disagree)</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5 (Strongly Agree)</option>
+		</select>
+	</p>
+	
+	<p>
+		<input type="submit" id="submitbtn" name="submitbtn" value="Submit your Answers!" />
+	</p>
+	
+</div>
+
+<div id="recommendation"></div>
+	
+<!--
+</form>
+-->
+
+<!-- ============================================================ -->
+
+<style>
+#recommendation {	
+	border:3px solid black;
+	background-color:#eee;
+	padding:10px;
+	width:400px;
+}
+</style>
+
+  <script type="text/javascript">
+    $("#submitbtn").on("click", function(event) {
+		event.preventDefault();
+		
+		var numqs = $("#questions > h3").length;
+
+        var scores = [];
+		// This way we don't have to manually check them all if the # of questions changes
+		for (var q=0;q<numqs;q++) {
+			scores.push( $("#q"+(q+1)).val() );
+		}
+		// This was the old way:
+//		var scores = [
+//			$("#q1").val(),
+//			$("#q2").val(),
+//			// etc
+//		];
+
+		$.post("/api/friends", {questions:scores}, function(data) {
+			var html = "<h3>" + data.name + "</h3>";
+			html += "<p><img src='" + data.icon + "' /></p>";
+			$("#recommendation").html(html);
+			// Looked this up to scroll to the bottom of the page.
+			// https://stackoverflow.com/questions/4249353/jquery-scroll-to-bottom-of-the-page
+			$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+        });
+    });
+  </script>
+
+
+</body>
+</html>
